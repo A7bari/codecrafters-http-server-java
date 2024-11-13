@@ -18,7 +18,7 @@ public class Main {
       client.getInputStream().read();
 
       // send the response to the client
-      String response = "HTTP/1.1 200 OK\\r\\n\\r\\n";
+      String response = "HTTP/1.1 200 OK\r\n\r\n";
       client.getOutputStream().write(response.getBytes());
 
     } catch (IOException e) {
