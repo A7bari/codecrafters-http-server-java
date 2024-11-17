@@ -14,6 +14,7 @@ public class HttpRequest {
     }
     
     public void addPathParam(String key, String value) {
+        System.out.println("adding params -  key: " + key + " value: " + value);
         pathParams.put(key, value);
     }
 

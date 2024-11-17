@@ -65,6 +65,7 @@ public class Router {
         // create a named capturing group in a regular expression 
         // ex: replace {id} with the regex (?<id>[^/]+)
         String regex = path.replaceAll("\\{([^/]+)\\}", "(?<$1>[^/]+)");
+        System.out.println("regex: " + regex);
         return Pattern.compile("^" + regex + "$");
     }
 }
