@@ -1,20 +1,14 @@
 import java.io.InputStream;
 
 public class ReqHandler {
-    private InputStream inStream;
-
-    public ReqHandler(InputStream inStream) {
-        this.inStream = inStream;
-    }
-
-    public Request parse() {
-        String request = readRequest();
+    static public HttpRequest parse(InputStream inStream) {
+        String request = readRequest(inStream);
         String[] lines = request.split("\r\n");
         String[] requestLine = lines[0].split(" ");
-        return new Request(requestLine[0], requestLine[1], requestLine[2]);
+        return new HttpRequest(requestLine[0], requestLine[1], requestLine[2]);
     }
 
-    private String readRequest() {
+    static private String readRequest(InputStream inStream) {
         StringBuilder request = new StringBuilder();
         try {
             int c;
