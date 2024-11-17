@@ -24,7 +24,6 @@ public class Main {
         client.getOutputStream().write(response.getBytes());
       } else {
         String response = "HTTP/1.1 404 Not Found\r\n\r\n";
-        response += "<html><body><h1>404 Not Found</h1></body></html>";
         client.getOutputStream().write(response.getBytes());
       }
 
