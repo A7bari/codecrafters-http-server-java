@@ -5,7 +5,7 @@ import java.util.Map;
 public class HttpResponse {
     private final OutputStream writer;
     private final Map<String, String> headers = new HashMap<>();
-    private String body;
+    private String body = "";
     private String statusString = "OK";
     private int statusCode = 200;
 
@@ -21,7 +21,9 @@ public class HttpResponse {
             headerString += entry.getKey() + ": " + entry.getValue() + "\r\n";
         }
 
-        headerString += "Content-Length: " + body.length() + "\r\n";
+        if (body.length() > 0)
+            headerString += "Content-Length: " + body.length() + "\r\n";
+    
         headerString += "\r\n";
 
         try {
