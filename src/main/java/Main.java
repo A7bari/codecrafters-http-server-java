@@ -11,10 +11,11 @@ public class Main {
 
     router.get("/echo/{str}", (req, res) -> {
       String str = req.getPathParam("str");
+      System.out.println("Echoing: " + str);
+
       res.setBody(str)
         .setHeader("Content-Type", "text/plain")
         .send();
-      
     });
 
 
