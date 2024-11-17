@@ -53,6 +53,8 @@ public class Router {
                 return;
             }
         }
+
+        response.setStatus(404, "Not Found").send();
     }
 
     private boolean isDynamicRoute(String path) {
