@@ -29,6 +29,11 @@ public class ReqHandler {
             currIndex++;
         }
 
+        // set body if exist 
+        if (currIndex < lines.length){
+            request.setBody(lines[currIndex].getBytes());
+        }
+
         return request;
     }
 
