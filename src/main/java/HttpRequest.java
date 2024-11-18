@@ -12,13 +12,12 @@ public class HttpRequest {
 
     public HttpRequest(String method, String path, String version) {
         System.out.println("New request - method: " + method + " path: " + path + " version: " + version);
-        this.method = method.toLowerCase();
+        this.method = method.toUpperCase();
         this.path = path;
         this.version = version;
     }
     
     public void addPathParam(String key, String value) {
-        System.out.println("adding params -  key: " + key + " value: " + value);
         pathParams.put(key, value);
     }
 
@@ -31,7 +30,7 @@ public class HttpRequest {
     }
     
     public String getBody() {
-        if (this.method.equals("get"))
+        if (this.method.equals("GET"))
             return "";
         return body;
     }

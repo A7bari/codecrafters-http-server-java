@@ -10,14 +10,14 @@ public class Router {
 
     public Router() {
         // initialize the dynamic map with the supported HTTP methods
-        dynamicRoutes.put("get", new HashMap<>());
-        dynamicRoutes.put("post", new HashMap<>());
+        dynamicRoutes.put("GET", new HashMap<>());
+        dynamicRoutes.put("POST", new HashMap<>());
     }
 
     public void get(String path, BiConsumer<HttpRequest, HttpResponse> handler) {
         if (isDynamicRoute(path)) {
             Pattern pattern = pathToPattern(path);
-            dynamicRoutes.get("get").put(pattern, handler);
+            dynamicRoutes.get("GET").put(pattern, handler);
         } else {
             routes.put("get " + path, handler);
         }
@@ -26,7 +26,7 @@ public class Router {
     public void post(String path, BiConsumer<HttpRequest, HttpResponse> handler) {
         if (isDynamicRoute(path)) {
             Pattern pattern = pathToPattern(path);
-            dynamicRoutes.get("post").put(pattern, handler);
+            dynamicRoutes.get("POST").put(pattern, handler);
         } else {
             routes.put("post " + path, handler);
         }
