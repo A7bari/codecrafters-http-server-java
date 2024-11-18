@@ -42,7 +42,8 @@ public class Router {
         } 
 
         // check dynamic routes
-        for (Map.Entry<Pattern, BiConsumer<HttpRequest, HttpResponse>> entry : dynamicRoutes.get(request.getMethod()).entrySet()) {
+        var droutes = dynamicRoutes.get(request.getMethod());
+        for (Map.Entry<Pattern, BiConsumer<HttpRequest, HttpResponse>> entry : droutes.entrySet()) {
             Matcher matcher = entry.getKey().matcher(request.getPath());
 
             // if the path matches the pattern
@@ -73,7 +74,6 @@ public class Router {
         // create a named capturing group in a regular expression 
         // ex: replace {id} with the regex (?<id>[^/]+)
         String regex = path.replaceAll("\\{([^/]+)\\}", "(?<$1>[^/]+)");
-        System.out.println("regex: " + regex);
         return Pattern.compile("^" + regex + "$");
     }
 }

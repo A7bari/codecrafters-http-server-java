@@ -12,7 +12,7 @@ public class HttpServer {
     public HttpServer(Router router, int port) {
         this.router = router;
         this.port = port;
-        this.executorService = Executors.newFixedThreadPool(10); // Create the thread pool once
+        this.executorService = Executors.newFixedThreadPool(10);
     }
 
     public void start() throws IOException {
