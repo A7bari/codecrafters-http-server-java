@@ -47,6 +47,7 @@ public class Main {
       String dir = argsParser.get("--directory");
       String body = req.getBody();
       
+      System.out.println("Received file: " + filename);
       
       try {
         FileUtil.writeFile(dir + filename, body);

@@ -22,6 +22,9 @@ public class HttpServer {
                 clientSocket.setSoTimeout(10000);
                 executorService.submit(() -> handleRequest(clientSocket));
             }
+        } catch (IOException e) {
+            System.out.println("Error starting server: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 

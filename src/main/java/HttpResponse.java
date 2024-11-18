@@ -14,24 +14,41 @@ public class HttpResponse {
     }
 
     public void send() {
-        String statusLine = "HTTP/1.1 " + statusCode + " " + statusString + "\r\n";
-        String headerString = "";
+        StringBuilder responseString = new StringBuilder();
+
+        responseString.append("HTTP/1.1 ")
+            .append(statusCode)
+            .append(" ")
+            .append(statusString)
+            .append("\r\n");
 
         for (Map.Entry<String, String> entry : headers.entrySet()) {
-            headerString += entry.getKey() + ": " + entry.getValue() + "\r\n";
+            responseString.append(entry.getKey())
+                    .append(": ")
+                    .append(entry.getValue())
+                    .append("\r\n");
         }
 
-        if (body.length() > 0)
-            headerString += "Content-Length: " + body.length() + "\r\n";
+        if (this.body.length() > 0)
+            responseString.append("Content-Length: ")
+                .append(this.body.length())
+                .append("\r\n");
     
-        headerString += "\r\n";
+        responseString.append("\r\n");
+
+        responseString.append(this.body);
 
         try {
-            writer.write((statusLine + headerString + body).getBytes());
+            writer.write(responseString.toString().getBytes());
             writer.flush();
         } catch (Exception e) {
             System.out.println("Exception: " + e.getMessage());
         }
+    }
+
+    public void send(String body) {
+        this.body = body;
+        send();
     }
 
     public HttpResponse setHeader(String key, String value) {
