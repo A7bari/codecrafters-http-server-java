@@ -33,7 +33,7 @@ public class Main {
 
       try {
         String fileContents = FileUtil.readFile(dir + "/" + filename);
-        res.setBody(fileContents)
+        res.setBody(fileContents.trim())
           .setHeader("Content-Type", "application/octet-stream")
           .send();
       } catch (IOException e) {
