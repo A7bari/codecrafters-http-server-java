@@ -6,12 +6,18 @@ import java.util.regex.Pattern;
 
 public class Router {
     private final Map<String, BiConsumer<HttpRequest, HttpResponse>> routes = new HashMap<>();
-    private final Map<Pattern, BiConsumer<HttpRequest, HttpResponse>> dynamicRoutes = new HashMap<>();
+    private final Map<String, Map<Pattern, BiConsumer<HttpRequest, HttpResponse>>> dynamicRoutes = new HashMap<>();
+
+    public Router() {
+        // initialize the dynamic map with the supported HTTP methods
+        dynamicRoutes.put("get", new HashMap<>());
+        dynamicRoutes.put("post", new HashMap<>());
+    }
 
     public void get(String path, BiConsumer<HttpRequest, HttpResponse> handler) {
         if (isDynamicRoute(path)) {
             Pattern pattern = pathToPattern(path);
-            dynamicRoutes.put(pattern, handler);
+            dynamicRoutes.get("get").put(pattern, handler);
         } else {
             routes.put("get " + path, handler);
         }
@@ -20,7 +26,7 @@ public class Router {
     public void post(String path, BiConsumer<HttpRequest, HttpResponse> handler) {
         if (isDynamicRoute(path)) {
             Pattern pattern = pathToPattern(path);
-            dynamicRoutes.put(pattern, handler);
+            dynamicRoutes.get("post").put(pattern, handler);
         } else {
             routes.put("post " + path, handler);
         }
@@ -36,7 +42,7 @@ public class Router {
         } 
 
         // check dynamic routes
-        for (Map.Entry<Pattern, BiConsumer<HttpRequest, HttpResponse>> entry : dynamicRoutes.entrySet()) {
+        for (Map.Entry<Pattern, BiConsumer<HttpRequest, HttpResponse>> entry : dynamicRoutes.get(request.getMethod()).entrySet()) {
             Matcher matcher = entry.getKey().matcher(request.getPath());
 
             // if the path matches the pattern
