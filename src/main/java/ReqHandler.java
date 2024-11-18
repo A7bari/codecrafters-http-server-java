@@ -20,7 +20,6 @@ public class ReqHandler {
 
         // headers
         while (currIndex < lines.length) {
-            System.out.println("Header: " + lines[currIndex]);
             if (lines[currIndex].equals("")) {
                 currIndex++;
                 break;
@@ -35,7 +34,7 @@ public class ReqHandler {
         }
 
         // set body if exist 
-        if (!lines[lines.length -1 ].equals("")){
+        if (currIndex < lines.length) {
             System.out.println("Body: " + lines[currIndex]);
             request.setBody(lines[currIndex]);
         }
@@ -49,9 +48,6 @@ public class ReqHandler {
             int c;
             while ((c = inStream.read()) != -1) {
                 request.append((char) c);
-                if (request.length() >= 4 && request.substring(request.length() - 4).equals("\r\n\r\n")) {
-                    break;
-                }
             }
         } catch (Exception e) {
             System.out.println("Exception: " + e.getMessage());
