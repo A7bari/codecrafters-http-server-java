@@ -7,8 +7,6 @@ public class HttpServer {
     private final int port;
     private final ExecutorService executorService;
 
-
-
     public HttpServer(Router router, int port) {
         this.router = router;
         this.port = port;
@@ -16,16 +14,19 @@ public class HttpServer {
     }
 
     public void start() throws IOException {
-        ServerSocket serverSocket = new ServerSocket(port);
-        System.out.println("Server started on port " + port);
+        try(ServerSocket serverSocket = new ServerSocket(port);) {
+            System.out.println("Server started on port " + port);
 
-        while (true) {
-            Socket clientSocket = serverSocket.accept();
-            executorService.submit(() -> handleRequest(clientSocket));
+            while (true) {
+                Socket clientSocket = serverSocket.accept();
+                clientSocket.setSoTimeout(10000);
+                executorService.submit(() -> handleRequest(clientSocket));
+            }
         }
     }
 
     private void handleRequest(Socket clientSocket) {
+
         try (InputStream inStream = clientSocket.getInputStream();
              OutputStream outStream = clientSocket.getOutputStream()) {
 
@@ -33,16 +34,9 @@ public class HttpServer {
             HttpResponse response = new HttpResponse(outStream);
 
             router.handle(request, response);
-
         } catch (IOException e) {
             System.out.println("Error handling client request: " + e.getMessage());
             e.printStackTrace();
-        } finally {
-            try {
-                clientSocket.close();
-            } catch (IOException e) {
-                System.out.println("Error closing client socket: " + e.getMessage());
-            }
         }
     }
 }

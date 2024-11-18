@@ -58,7 +58,6 @@ public class Main {
       }
     });
 
-
     HttpServer server = new HttpServer(router, 4221);
 
     try {
