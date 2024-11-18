@@ -13,7 +13,7 @@ public class Router {
             Pattern pattern = pathToPattern(path);
             dynamicRoutes.put(pattern, handler);
         } else {
-            routes.put("GET " + path, handler);
+            routes.put("get " + path, handler);
         }
     }
 
@@ -22,7 +22,7 @@ public class Router {
             Pattern pattern = pathToPattern(path);
             dynamicRoutes.put(pattern, handler);
         } else {
-            routes.put("POST " + path, handler);
+            routes.put("post " + path, handler);
         }
     }
 
