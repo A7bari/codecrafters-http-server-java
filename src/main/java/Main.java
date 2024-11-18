@@ -2,7 +2,8 @@ import java.io.IOException;
 
 public class Main {
   public static void main(String[] args) {
-
+    ArgsParser argsParser = new ArgsParser(args);
+    
     Router router = new Router();
 
     router.get("/", (req, res) -> {
@@ -24,6 +25,21 @@ public class Main {
       res.setBody(userAgent)
         .setHeader("Content-Type", "text/plain")
         .send();
+    });
+
+    router.get("/files/{filename}", (req, res) -> {
+      String filename = req.getPathParam("filename");
+      String dir = argsParser.get("--directory");
+
+      try {
+        String fileContents = FileUtil.readFile(dir + "/" + filename);
+        res.setBody(fileContents)
+          .setHeader("Content-Type", "text/plain")
+          .send();
+      } catch (IOException e) {
+        res.setStatus(404, "Not Found")
+          .send();
+      }
     });
 
 
