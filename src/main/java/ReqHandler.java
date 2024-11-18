@@ -16,6 +16,7 @@ public class ReqHandler {
 
         // headers
         while (currIndex < lines.length) {
+            System.out.println("Header: " + lines[currIndex]);
             if (lines[currIndex].equals("")) {
                 currIndex++;
                 break;
