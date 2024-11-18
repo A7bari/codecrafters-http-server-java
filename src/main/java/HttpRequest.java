@@ -8,7 +8,7 @@ public class HttpRequest {
     private final Map<String, String> headers = new HashMap<>();
     private final Map<String, String> pathParams = new HashMap<>();
     
-    private byte[] body = new byte[0];
+    private String body = "";
 
     public HttpRequest(String method, String path, String version) {
         this.method = method.toLowerCase();
@@ -25,13 +25,13 @@ public class HttpRequest {
         headers.put(key, value);
     }
 
-    public void setBody(byte[] body) {
+    public void setBody(String body) {
         this.body = body;
     }
     
-    public byte[] getBody() {
+    public String getBody() {
         if (this.method.equals("get"))
-            return new byte[0];
+            return "";
         return body;
     }
 

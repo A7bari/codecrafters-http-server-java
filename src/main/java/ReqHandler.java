@@ -31,7 +31,8 @@ public class ReqHandler {
 
         // set body if exist 
         if (currIndex < lines.length){
-            request.setBody(lines[currIndex].getBytes());
+            System.out.println("Body: " + lines[currIndex]);
+            request.setBody(lines[currIndex]);
         }
 
         return request;
