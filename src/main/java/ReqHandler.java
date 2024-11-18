@@ -4,6 +4,7 @@ public class ReqHandler {
     static public HttpRequest parse(InputStream inStream) {
         String reqStr = readRequest(inStream);
         String[] lines = reqStr.split("\r\n");
+        System.out.println("Handling Request: " + reqStr);
 
         // track the index of the current line
         int currIndex = 0;
@@ -34,6 +35,8 @@ public class ReqHandler {
             System.out.println("Body: " + lines[currIndex]);
             request.setBody(lines[currIndex]);
         }
+
+
 
         return request;
     }
