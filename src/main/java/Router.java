@@ -42,9 +42,10 @@ public class Router {
             // if the path matches the pattern
             if (matcher.matches()) {
                 // add path params to the request object
-                for (int i = 1; i <= matcher.groupCount(); i++) {
-                    String name = matcher.group(i);
-                    String value = matcher.group(i);
+                Map<String, Integer> groups = matcher.namedGroups();
+                for (Map.Entry<String, Integer> group : groups.entrySet()) {
+                    String name = group.getKey();
+                    String value = matcher.group(group.getValue());
                     request.addPathParam(name, value);
                 }
                 
