@@ -42,21 +42,21 @@ public class Main {
       }
     });
 
-    router.post("/files/{filename}", (req, res) -> {
-      String filename = req.getPathParam("filename");
-      String dir = argsParser.get("--directory");
-      String body = req.getBody();
+    // router.post("/files/{filename}", (req, res) -> {
+    //   String filename = req.getPathParam("filename");
+    //   String dir = argsParser.get("--directory");
+    //   String body = req.getBody();
       
       
-      try {
-        FileUtil.writeFile(dir + filename, body);
-        res.setStatus(201, "Created")
-          .send();
-      } catch (IOException e) {
-        res.setStatus(500, "Internal Server Error")
-          .send();
-      }
-    });
+    //   try {
+    //     FileUtil.writeFile(dir + filename, body);
+    //     res.setStatus(201, "Created")
+    //       .send();
+    //   } catch (IOException e) {
+    //     res.setStatus(500, "Internal Server Error")
+    //       .send();
+    //   }
+    // });
 
 
     HttpServer server = new HttpServer(router, 4221);
