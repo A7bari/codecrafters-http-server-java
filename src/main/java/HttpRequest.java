@@ -11,6 +11,7 @@ public class HttpRequest {
     private String body = "";
 
     public HttpRequest(String method, String path, String version) {
+        System.out.println("New request - method: " + method + " path: " + path + " version: " + version);
         this.method = method.toLowerCase();
         this.path = path;
         this.version = version;
