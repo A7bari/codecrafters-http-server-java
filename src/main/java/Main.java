@@ -47,11 +47,11 @@ public class Main {
       String dir = argsParser.get("--directory");
       String body = req.getBody();
       
-      res.setStatus(201, "Created")
-        .send();
-
+      
       try {
         FileUtil.writeFile(dir + filename, body);
+        res.setStatus(201, "Created")
+          .send();
       } catch (IOException e) {
         res.setStatus(500, "Internal Server Error")
           .send();

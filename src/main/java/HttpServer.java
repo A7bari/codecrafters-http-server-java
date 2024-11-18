@@ -5,10 +5,14 @@ import java.util.concurrent.*;
 public class HttpServer {
     private final Router router;
     private final int port;
+    private final ExecutorService executorService;
+
+
 
     public HttpServer(Router router, int port) {
         this.router = router;
         this.port = port;
+        this.executorService = Executors.newFixedThreadPool(10); // Create the thread pool once
     }
 
     public void start() throws IOException {
@@ -17,7 +21,6 @@ public class HttpServer {
 
         while (true) {
             Socket clientSocket = serverSocket.accept();
-            ExecutorService executorService = Executors.newFixedThreadPool(10);
             executorService.submit(() -> handleRequest(clientSocket));
         }
     }
@@ -26,13 +29,20 @@ public class HttpServer {
         try (InputStream inStream = clientSocket.getInputStream();
              OutputStream outStream = clientSocket.getOutputStream()) {
 
-            
             HttpRequest request = ReqHandler.parse(inStream);
             HttpResponse response = new HttpResponse(outStream);
 
             router.handle(request, response);
+
         } catch (IOException e) {
+            System.out.println("Error handling client request: " + e.getMessage());
             e.printStackTrace();
+        } finally {
+            try {
+                clientSocket.close();
+            } catch (IOException e) {
+                System.out.println("Error closing client socket: " + e.getMessage());
+            }
         }
     }
 }
