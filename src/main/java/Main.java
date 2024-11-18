@@ -34,7 +34,7 @@ public class Main {
       try {
         String fileContents = FileUtil.readFile(dir + "/" + filename);
         res.setBody(fileContents)
-          .setHeader("Content-Type", "text/plain")
+          .setHeader("Content-Type", "application/octet-stream")
           .send();
       } catch (IOException e) {
         res.setStatus(404, "Not Found")
