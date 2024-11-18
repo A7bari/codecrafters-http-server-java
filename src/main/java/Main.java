@@ -18,6 +18,14 @@ public class Main {
         .send();
     });
 
+    router.get("/user-agent", (req, res) -> {
+      String userAgent = req.getHeader("User-Agent");
+
+      res.setBody(userAgent)
+        .setHeader("Content-Type", "text/plain")
+        .send();
+    });
+
 
     HttpServer server = new HttpServer(router, 4221);
 
