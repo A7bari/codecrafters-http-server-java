@@ -32,7 +32,7 @@ public class Main {
       String dir = argsParser.get("--directory");
 
       try {
-        String fileContents = FileUtil.readFile(dir + "/" + filename);
+        String fileContents = FileUtil.readFile(dir + filename);
         res.setBody(fileContents.trim())
           .setHeader("Content-Type", "application/octet-stream")
           .send();
@@ -48,7 +48,7 @@ public class Main {
       String body = req.getBody().toString();
 
       try {
-        FileUtil.writeFile(dir + "/" + filename, body);
+        FileUtil.writeFile(dir + filename, body);
         res.setStatus(201, "Created")
           .send();
       } catch (IOException e) {
