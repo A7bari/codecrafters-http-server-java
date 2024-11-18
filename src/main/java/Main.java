@@ -45,7 +45,7 @@ public class Main {
     router.post("/files/{filename}", (req, res) -> {
       String filename = req.getPathParam("filename");
       String dir = argsParser.get("--directory");
-      String body = req.getBody().toString();
+      String body = req.getBody();
 
       try {
         FileUtil.writeFile(dir + filename, body);
