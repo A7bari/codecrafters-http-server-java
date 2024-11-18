@@ -48,6 +48,7 @@ public class Router {
 
             // if the path matches the pattern
             if (matcher.matches()) {
+                System.out.println("Dynamic route matched: "+ request.getMethod() + " " + request.getPath());
                 // add path params to the request object
                 Map<String, Integer> groups = matcher.namedGroups();
                 for (Map.Entry<String, Integer> group : groups.entrySet()) {
