@@ -1,17 +1,17 @@
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Router {
-    private final Map<String, BiConsumer<HttpRequest, HttpResponse>> routes = new HashMap<>();
-    private final Map<String, Map<Pattern, BiConsumer<HttpRequest, HttpResponse>>> dynamicRoutes = new HashMap<>();
+    private final Map<String, BiConsumer<HttpRequest, HttpResponse>> routes = new ConcurrentHashMap<>();
+    private final Map<String, Map<Pattern, BiConsumer<HttpRequest, HttpResponse>>> dynamicRoutes = new ConcurrentHashMap<>();
 
     public Router() {
         // initialize the dynamic map with the supported HTTP methods
-        dynamicRoutes.put("GET", new HashMap<>());
-        dynamicRoutes.put("POST", new HashMap<>());
+        dynamicRoutes.put("GET", new ConcurrentHashMap<>());
+        dynamicRoutes.put("POST", new ConcurrentHashMap<>());
     }
 
     public void get(String path, BiConsumer<HttpRequest, HttpResponse> handler) {
@@ -46,7 +46,7 @@ public class Router {
         for (Map.Entry<Pattern, BiConsumer<HttpRequest, HttpResponse>> entry : droutes.entrySet()) {
             Matcher matcher = entry.getKey().matcher(request.getPath());
 
-            // if the path matches the pattern
+            // if the path matches the pattern    
             if (matcher.matches()) {
                 System.out.println("Dynamic route matched: "+ request.getMethod() + " " + request.getPath());
                 // add path params to the request object
