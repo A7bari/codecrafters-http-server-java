@@ -1,7 +1,8 @@
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.io.ByteArrayOutputStream;
+import java.util.zip.GZIPOutputStream;
 
 public class HttpResponse {
     private static final String[] supportedEncodings = {"gzip"};
@@ -35,7 +36,7 @@ public class HttpResponse {
 
         if (!this.body.isEmpty()) {
             responseString.append("Content-Length: ")
-                .append(this.body.getBytes(StandardCharsets.UTF_8).length)
+                .append(this.body.getBytes().length)
                 .append("\r\n");
         }
 
@@ -47,7 +48,7 @@ public class HttpResponse {
         System.out.println("Sending response:");
         System.out.println(responseString);
 
-        writer.write(responseString.toString().getBytes(StandardCharsets.UTF_8));
+        writer.write(responseString.toString().getBytes());
         writer.flush();
         } catch (Exception e) {
             System.out.println("Exception while sending response: " + e.getMessage());
@@ -56,7 +57,7 @@ public class HttpResponse {
     }
 
     public void send(String body) {
-        this.body = body;
+        this.body = encodeBody(body);
         send();
     }
 
@@ -66,7 +67,7 @@ public class HttpResponse {
     }
 
     public HttpResponse setBody(String body) {
-        this.body = body;
+        this.body = encodeBody(body);
 
         return this;
     }
@@ -82,7 +83,7 @@ public class HttpResponse {
         if (acceptEncoding == null) {
             return this;
         }
-        
+
         String[] encodings = acceptEncoding.split(", ");
 
         for (String encoding : encodings) {
@@ -95,5 +96,25 @@ public class HttpResponse {
         }
 
         return this;
+    }
+
+    private String encodeBody(String body) {
+        String encoding = headers.get("Content-Encoding");
+
+        if (encoding.equals("gzip")) {
+            // Implement gzip encoding
+            try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                GZIPOutputStream gzipOutputStream = new GZIPOutputStream(byteArrayOutputStream)) {
+                gzipOutputStream.write(body.getBytes());
+                gzipOutputStream.finish();
+                return byteArrayOutputStream.toString();
+            } catch (Exception e) {
+                e.printStackTrace();
+                return body;
+            }
+
+        }
+
+        return body;
     }
 }
