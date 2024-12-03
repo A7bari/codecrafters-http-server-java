@@ -8,7 +8,7 @@ public class HttpResponse {
     private static final String[] supportedEncodings = {"gzip"};
     private final OutputStream writer;
     private final Map<String, String> headers = new HashMap<>();
-    private String body = "";
+    private byte[] body = new byte[0];
     private String statusString = "OK";
     private int statusCode = 200;
 
@@ -34,21 +34,20 @@ public class HttpResponse {
                 .append("\r\n");
         }
 
-        if (!this.body.isEmpty()) {
+        if (this.body.length > 0) {
             responseString.append("Content-Length: ")
-                .append(this.body.getBytes().length)
+                .append(body.length)
                 .append("\r\n");
         }
 
         responseString.append("\r\n");
-
-        responseString.append(this.body);
 
         // Log response for debugging
         System.out.println("Sending response:");
         System.out.println(responseString);
 
         writer.write(responseString.toString().getBytes());
+        writer.write(body);
         writer.flush();
         } catch (Exception e) {
             System.out.println("Exception while sending response: " + e.getMessage());
@@ -98,23 +97,23 @@ public class HttpResponse {
         return this;
     }
 
-    private String encodeBody(String body) {
+    private byte[] encodeBody(String body) {
         String encoding = headers.get("Content-Encoding");
+        byte[] bodyBytes = body.getBytes();
 
         if (encoding.equals("gzip")) {
             // Implement gzip encoding
             try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 GZIPOutputStream gzipOutputStream = new GZIPOutputStream(byteArrayOutputStream)) {
-                gzipOutputStream.write(body.getBytes());
+                gzipOutputStream.write(bodyBytes);
                 gzipOutputStream.finish();
-                return byteArrayOutputStream.toString();
+                return byteArrayOutputStream.toByteArray();
             } catch (Exception e) {
                 e.printStackTrace();
-                return body;
+                return bodyBytes;
             }
-
         }
 
-        return body;
+        return bodyBytes;
     }
 }
