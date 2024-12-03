@@ -19,7 +19,7 @@ public class Router {
             Pattern pattern = pathToPattern(path);
             dynamicRoutes.get("GET").put(pattern, handler);
         } else {
-            routes.put("get " + path, handler);
+            routes.put("GET " + path, handler);
         }
     }
 
@@ -28,7 +28,7 @@ public class Router {
             Pattern pattern = pathToPattern(path);
             dynamicRoutes.get("POST").put(pattern, handler);
         } else {
-            routes.put("post " + path, handler);
+            routes.put("POST " + path, handler);
         }
     }
 
@@ -37,6 +37,7 @@ public class Router {
         BiConsumer<HttpRequest, HttpResponse> handler = routes.get(key);
 
         if (handler != null) {
+            System.out.println("Route matched: "+ request.getMethod() + " " + request.getPath());
             handler.accept(request, response);
             return;
         } 
