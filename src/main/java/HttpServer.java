@@ -19,7 +19,7 @@ public class HttpServer {
 
             while (true) {
                 Socket clientSocket = serverSocket.accept();
-                clientSocket.setSoTimeout(10000);
+                clientSocket.setSoTimeout(30000);
                 System.out.println("New client connected");
                 executorService.submit(() -> handleRequest(clientSocket));
             }
