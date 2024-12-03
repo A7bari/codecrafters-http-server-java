@@ -4,11 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HttpResponse {
+    private static final String[] supportedEncodings = {"gzip"};
     private final OutputStream writer;
     private final Map<String, String> headers = new HashMap<>();
     private String body = "";
     private String statusString = "OK";
     private int statusCode = 200;
+
 
     public HttpResponse(OutputStream writer) {
         this.writer = writer;
@@ -72,6 +74,21 @@ public class HttpResponse {
     public HttpResponse setStatus(int statusCode, String statusString) {
         this.statusCode = statusCode;
         this.statusString = statusString;
+
+        return this;
+    }
+
+    public HttpResponse setEncoding(String acceptEncoding) {
+        String[] encodings = acceptEncoding.split(", ");
+
+        for (String encoding : encodings) {
+            for (String supportedEncoding : supportedEncodings) {
+                if (encoding.contains(supportedEncoding)) {
+                    headers.put("Content-Encoding", supportedEncoding);
+                    return this;
+                }
+            }
+        }
 
         return this;
     }

@@ -35,7 +35,8 @@ public class HttpServer {
 
             HttpRequest request = ReqHandler.parse(inStream);
             HttpResponse response = new HttpResponse(outStream);
-
+            response.setEncoding(request.getHeader("Accept-Encoding"));
+            
             router.handle(request, response);
             outStream.flush();
         } catch (IOException e) {
