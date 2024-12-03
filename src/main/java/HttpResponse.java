@@ -79,6 +79,10 @@ public class HttpResponse {
     }
 
     public HttpResponse setEncoding(String acceptEncoding) {
+        if (acceptEncoding == null) {
+            return this;
+        }
+        
         String[] encodings = acceptEncoding.split(", ");
 
         for (String encoding : encodings) {
