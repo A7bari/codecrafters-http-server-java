@@ -1,38 +1,57 @@
-[![progress-banner](https://backend.codecrafters.io/progress/http-server/dcceaafc-22d8-4c31-a0a7-3ad9c0025932)](https://app.codecrafters.io/users/codecrafters-bot?r=2qF)
+# Java HTTP Server
 
-This is a starting point for Java solutions to the
-["Build Your Own HTTP server" Challenge](https://app.codecrafters.io/courses/http-server/overview).
+A lightweight HTTP server built in Java, capable of handling GET and POST requests, serving static files, and supporting dynamic routing. This project was completed as part of the CodeCrafters "Build Your Own HTTP Server" challenge.
 
-[HTTP](https://en.wikipedia.org/wiki/Hypertext_Transfer_Protocol) is the
-protocol that powers the web. In this challenge, you'll build a HTTP/1.1 server
-that is capable of serving multiple clients.
+## Features
+- **Static and Dynamic Routing**:
+  - Supports both static routes and dynamic routes with path parameters (e.g., `/echo/{str}`).
+- **Concurrency**:
+  - Handles multiple client connections using a thread pool.
+- **File Handling**:
+  - Serve and write files dynamically to/from a specified directory.
+- **Gzip Compression**:
+  - Supports gzip compression for response bodies.
+- **Request and Response Management**:
+  - Easy-to-use abstractions for HTTP requests and responses.
 
-Along the way you'll learn about TCP servers,
-[HTTP request syntax](https://www.w3.org/Protocols/rfc2616/rfc2616-sec5.html),
-and more.
+## Getting Started
 
-**Note**: If you're viewing this repo on GitHub, head over to
-[codecrafters.io](https://codecrafters.io) to try the challenge.
+### Prerequisites
+- Java Development Kit (JDK) 21 or higher
+- Maven or any Java build tool of your choice
 
-# Passing the first stage
+### Usage
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/A7bari/codecrafters-http-server-java.git
+   cd codecrafters-http-server-java
+   ```
+2. Compile and run the server:
+   ```bash
+   javac Main.java
+   java Main --directory=/path/to/serve/
+   ```
+3. Access the server at `http://localhost:4221`.
 
-The entry point for your HTTP server implementation is in
-`src/main/java/Main.java`. Study and uncomment the relevant code, and push your
-changes to pass the first stage:
+## Example Endpoints
+- **GET /**: Returns a `200 OK` response.
+- **GET /echo/{str}**: Echoes the given string.
+- **GET /user-agent**: Returns the client's `User-Agent` header.
+- **GET /files/{filename}**: Serves a file from the specified directory.
+- **POST /files/{filename}**: Writes a file to the specified directory with the content in the request body.
 
-```sh
-git commit -am "pass 1st stage" # any msg
-git push origin master
-```
+## Project Structure
+- **HttpServer**: Main server class for managing client connections.
+- **Router**: Handles routing for different HTTP methods and paths.
+- **HttpRequest** and **HttpResponse**: Abstractions for HTTP request/response.
+- **FileUtil**: Utility for file I/O operations.
+- **ReqHandler**: Parses incoming HTTP requests.
 
-Time to move on to the next stage!
+## Future Enhancements
+- Add support for HTTPS.
+- Implement additional HTTP methods (PUT, DELETE).
+- Integrate structured logging.
+- Introduce automated testing (unit and integration tests).
 
-# Stage 2 & beyond
-
-Note: This section is for stages 2 and beyond.
-
-1. Ensure you have `mvn` installed locally
-1. Run `./your_program.sh` to run your program, which is implemented in
-   `src/main/java/Main.java`.
-1. Commit your changes and run `git push origin master` to submit your solution
-   to CodeCrafters. Test output will be streamed to your terminal.
+## License
+This project is licensed under the MIT License.
