@@ -30,7 +30,6 @@ public class HttpServer {
     }
 
     private void handleRequest(Socket clientSocket) {
-
         try (InputStream inStream = clientSocket.getInputStream();
              OutputStream outStream = clientSocket.getOutputStream()) {
 
@@ -38,6 +37,7 @@ public class HttpServer {
             HttpResponse response = new HttpResponse(outStream);
 
             router.handle(request, response);
+            outStream.flush();
         } catch (IOException e) {
             System.out.println("Error handling client request: " + e.getMessage());
             e.printStackTrace();

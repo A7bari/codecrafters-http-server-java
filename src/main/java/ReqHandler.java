@@ -5,7 +5,8 @@ import java.io.InputStreamReader;
 
 public class ReqHandler {
     public static HttpRequest parse(InputStream inStream) {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inStream))) {
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inStream));
             // Read the request line
             String requestLine = reader.readLine();
             if (requestLine == null || requestLine.isEmpty()) {

@@ -58,7 +58,6 @@ public class Router {
                 }
                 
                 // call the handler
-                System.out.println("Dynamic route matched: "+ request.getMethod() + " " + request.getPath());
                 entry.getValue().accept(request, response);
                 return;
             }

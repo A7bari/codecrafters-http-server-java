@@ -1,4 +1,5 @@
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,8 +15,9 @@ public class HttpResponse {
     }
 
     public void send() {
-        StringBuilder responseString = new StringBuilder();
+    StringBuilder responseString = new StringBuilder();
 
+    try {
         responseString.append("HTTP/1.1 ")
             .append(statusCode)
             .append(" ")
@@ -24,25 +26,30 @@ public class HttpResponse {
 
         for (Map.Entry<String, String> entry : headers.entrySet()) {
             responseString.append(entry.getKey())
-                    .append(": ")
-                    .append(entry.getValue())
-                    .append("\r\n");
+                .append(": ")
+                .append(entry.getValue())
+                .append("\r\n");
         }
 
-        if (this.body.length() > 0)
+        if (!this.body.isEmpty()) {
             responseString.append("Content-Length: ")
-                .append(this.body.length())
+                .append(this.body.getBytes(StandardCharsets.UTF_8).length)
                 .append("\r\n");
-    
+        }
+
         responseString.append("\r\n");
 
         responseString.append(this.body);
 
-        try {
-            writer.write(responseString.toString().getBytes());
-            writer.flush();
+        // Log response for debugging
+        System.out.println("Sending response:");
+        System.out.println(responseString);
+
+        writer.write(responseString.toString().getBytes(StandardCharsets.UTF_8));
+        writer.flush();
         } catch (Exception e) {
-            System.out.println("Exception: " + e.getMessage());
+            System.out.println("Exception while sending response: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
