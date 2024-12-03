@@ -1,52 +1,50 @@
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class ReqHandler {
-    static public HttpRequest parse(InputStream inStream) {
-        String reqStr = readRequest(inStream);
-        String[] lines = reqStr.split("\r\n");
-
-        // track the index of the current line
-        int currIndex = 0;
-
-        // request line
-        String[] requestLine = lines[currIndex].split(" ");
-        currIndex++;
-
-        HttpRequest request = new HttpRequest(requestLine[0], requestLine[1], requestLine[2]);
-
-        // headers
-        while (currIndex < lines.length) {
-            if (lines[currIndex].equals("")) {
-                currIndex++;
-                break;
+    public static HttpRequest parse(InputStream inStream) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inStream))) {
+            // Read the request line
+            String requestLine = reader.readLine();
+            if (requestLine == null || requestLine.isEmpty()) {
+                throw new IOException("Invalid HTTP request: Empty request line");
             }
 
-            String[] header = lines[currIndex].split(": ");
-            if (header.length == 2) {
-                request.addHeader(header[0], header[1]);
+            String[] requestParts = requestLine.split(" ");
+            if (requestParts.length != 3) {
+                throw new IOException("Invalid HTTP request: Malformed request line");
             }
 
-            currIndex++;
-        }
+            HttpRequest request = new HttpRequest(requestParts[0], requestParts[1], requestParts[2]);
 
-        // set body if exist 
-        if (currIndex < lines.length) {
-            request.setBody(lines[currIndex]);
-        }
-
-        return request;
-    }
-
-    static private String readRequest(InputStream inStream) {
-        StringBuilder request = new StringBuilder();
-        try {
-            int c;
-            while ((c = inStream.read()) != -1) {
-                request.append((char) c);
+            // Read headers
+            String line;
+            while ((line = reader.readLine()) != null && !line.isEmpty()) {
+                String[] headerParts = line.split(": ", 2);
+                if (headerParts.length == 2) {
+                    request.addHeader(headerParts[0], headerParts[1]);
+                }
             }
-        } catch (Exception e) {
-            System.out.println("Exception: " + e.getMessage());
+
+            // Read body (if Content-Length is specified)
+            String contentLengthHeader = request.getHeader("Content-Length");
+            if (contentLengthHeader != null) {
+                int contentLength = Integer.parseInt(contentLengthHeader);
+                char[] body = new char[contentLength];
+                int bytesRead = reader.read(body, 0, contentLength);
+                if (bytesRead != contentLength) {
+                    throw new IOException("Unexpected end of input while reading body");
+                }
+                request.setBody(new String(body));
+            }
+
+            return request;
+        } catch (IOException e) {
+            System.out.println("Error parsing request: " + e.getMessage());
+            e.printStackTrace();
+            return null;
         }
-        return request.toString();
     }
 }
