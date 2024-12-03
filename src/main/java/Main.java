@@ -6,7 +6,7 @@ public class Main {
     
     Router router = new Router();
 
-    router.get("/", (_, res) -> {
+    router.get("/", (req, res) -> {
       res.send();
     });
 
