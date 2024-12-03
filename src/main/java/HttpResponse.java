@@ -98,8 +98,12 @@ public class HttpResponse {
     }
 
     private byte[] encodeBody(String body) {
+        
         String encoding = headers.get("Content-Encoding");
         byte[] bodyBytes = body.getBytes();
+        if (encoding == null) {
+            return bodyBytes;
+        }
 
         if (encoding.equals("gzip")) {
             // Implement gzip encoding
